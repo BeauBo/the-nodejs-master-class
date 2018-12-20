@@ -88,15 +88,14 @@ const unifiedServer = (req, res) => {
 // Define handlers
 const handlers = {};
 
-// Sample handler
-handlers.sample = (data, cb) => {
-  // Callback a http code, and a payload object
-  cb(406, { name: 'sample handler' });
+// Ping handler
+handlers.ping = (data, cb) => {
+  cb(200);
 };
 
 // Not found handler
 handlers.notFound = (data, cb) => cb(404);
 // Define a request router
 const router = {
-  sample: handlers.sample,
+  ping: handlers.ping,
 };
