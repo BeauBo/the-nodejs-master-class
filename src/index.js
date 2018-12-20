@@ -5,13 +5,32 @@
 // Dependencies
 
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
+const fs = require('fs');
 const config = require('./config');
 
+// instantiate the HTTP server
+const httpServer = http.createServer((req, res) => {
+  unifiedServer(req, res);
+});
 
-// The server should respond to all requests with a string
-const server = http.createServer((req, res) => {
+// Start the HTTP server
+httpServer.listen(config.httpPort, () => console.log(`The server is listening on port ${config.httpPort} now`));
+
+// Instantiate the HTTPS server
+const httpsServerOption = {
+  key: fs.readFileSync('../https/key.pem'),
+  cert: fs.readFileSync('../https/cert.pem'),
+};
+const httpsServer = https.createServer(httpsServerOption, (req, res) => {
+  unifiedServer(req, res);
+});
+// Start the HTTPS server
+httpsServer.listen(config.httpsPort, () => console.log(`The server is listening on port ${config.httpsPort} now`));
+// All the server logic for both http and https server
+const unifiedServer = (req, res) => {
   // Get the URL and parse it
   const parseURL = url.parse(req.url, true);
 
@@ -64,10 +83,7 @@ const server = http.createServer((req, res) => {
       console.log('Returning this response:', statusCode, payloadString);
     });
   });
-});
-
-// Start the server
-server.listen(config.port, () => console.log(`The server is listening on port ${config.port} in ${config.envName} now`));
+};
 
 // Define handlers
 const handlers = {};
