@@ -13,6 +13,7 @@
     "rules": {
         "no-console": "off",
         "no-return-assign": "off",
+        "no-nested-ternary": "off",
         "no-use-before-define": ["error", { "variables": false }],
         "linebreak-style": [
             "error",
